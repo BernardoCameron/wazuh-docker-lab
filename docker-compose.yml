@@ -69,27 +69,27 @@ services:
       - wazuh.indexer
       - wazuh.manager
 
-wazuh.agent:
-    image: ubuntu:22.04
-    container_name: wazuh-agent
-    hostname: wazuh-agent
-    restart: always
-    environment:
-      - WAZUH_MANAGER=wazuh.manager
-      - WAZUH_AGENT_NAME=agente-laboratorio
-    command: >
-      bash -c "apt-get update -y &&
-               apt-get install -y curl lsb-release &&
-               curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --dearmor -o /usr/share/keyrings/wazuh.gpg &&
-               echo 'deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main' > /etc/apt/sources.list.d/wazuh.list &&
-               apt-get update -y &&
-               WAZUH_MANAGER=wazuh.manager WAZUH_AGENT_NAME=agente-laboratorio apt-get install -y wazuh-agent=4.14.4-1 &&
-               /var/ossec/bin/wazuh-control start &&
-               tail -f /var/ossec/logs/ossec.log"
-    depends_on:
-      - wazuh.manager
-    networks:
-      - wazuh-network
+  wazuh.agent:
+      image: ubuntu:22.04
+      container_name: wazuh-agent
+      hostname: wazuh-agent
+      restart: always
+      environment:
+        - WAZUH_MANAGER=wazuh.manager
+        - WAZUH_AGENT_NAME=agente-laboratorio
+      command: >
+        bash -c "apt-get update -y &&
+                apt-get install -y curl lsb-release &&
+                curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --dearmor -o /usr/share/keyrings/wazuh.gpg &&
+                echo 'deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main' > /etc/apt/sources.list.d/wazuh.list &&
+                apt-get update -y &&
+                WAZUH_MANAGER=wazuh.manager WAZUH_AGENT_NAME=agente-laboratorio apt-get install -y wazuh-agent=4.14.4-1 &&
+                /var/ossec/bin/wazuh-control start &&
+                tail -f /var/ossec/logs/ossec.log"
+      depends_on:
+        - wazuh.manager
+      networks:
+        - wazuh-network
 
 volumes:
   wazuh-indexer-data:
