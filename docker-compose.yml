@@ -41,7 +41,30 @@ services:
     depends_on:
       - wazuh.indexer
 
+  wazuh.dashboard:
+    image: wazuh/wazuh-dashboard:4.14.4
+    container_name: wazuh-dashboard
+    hostname: wazuh.dashboard
+    restart: always
+    ports:
+      - "443:5601"
+    environment:
+      - INDEXER_USERNAME=admin
+      - INDEXER_PASSWORD=${INDEXER_PASSWORD}
+      - WAZUH_API_URL=https://wazuh.manager
+      - DASHBOARD_USERNAME=kibanaserver
+      - DASHBOARD_PASSWORD=${DASHBOARD_PASSWORD}
+      - API_USERNAME=wazuh-wui
+      - API_PASSWORD=${API_PASSWORD}
+    volumes:
+      - wazuh-dashboard-data:/usr/share/wazuh-dashboard/data
+      - ./config/wazuh_dashboard:/wazuh-config-mount/etc/wazuh-dashboard
+    depends_on:
+      - wazuh.indexer
+      - wazuh.manager
+
 volumes:
   wazuh-indexer-data:
   wazuh-manager-data:
   wazuh-manager-logs:
+  wazuh-dashboard-data:
