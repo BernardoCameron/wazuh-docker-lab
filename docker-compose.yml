@@ -106,14 +106,17 @@ services:
       - WAZUH_MANAGER=wazuh.manager
       - WAZUH_AGENT_NAME=agente-laboratorio
     command: >
-      bash -c "apt-get update -y &&
-               apt-get install -y curl lsb-release gnupg &&
-               curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --dearmor -o /usr/share/keyrings/wazuh.gpg &&
-               echo 'deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main' > /etc/apt/sources.list.d/wazuh.list &&
-               apt-get update -y &&
-               WAZUH_MANAGER=wazuh.manager WAZUH_AGENT_NAME=agente-laboratorio apt-get install -y wazuh-agent=4.14.4-1 &&
-               /var/ossec/bin/wazuh-control start &&
-               tail -f /var/ossec/logs/ossec.log"
+      bash -c "
+        apt-get update -y &&
+        apt-get install -y curl lsb-release gnupg &&
+        curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --batch --dearmor -o /usr/share/keyrings/wazuh.gpg &&
+        echo 'deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main' > /etc/apt/sources.list.d/wazuh.list &&
+        apt-get update -y &&
+        WAZUH_MANAGER=wazuh.manager WAZUH_AGENT_NAME=agente-laboratorio apt-get install -y wazuh-agent=4.14.4-1 &&
+        sleep 15 &&
+        /var/ossec/bin/wazuh-control start &&
+        tail -f /var/ossec/logs/ossec.log
+      "
     depends_on:
       - wazuh.manager
     networks:
