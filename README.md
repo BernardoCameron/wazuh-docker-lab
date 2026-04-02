@@ -69,7 +69,21 @@ docker exec -it wazuh-agent bash /scripts/simulate-attack.sh
 ```
 
 Esto generará logs de intentos fallidos en `/var/log/auth.log`. Podrás ver las alertas en tiempo real en:
-**Wazuh Dashboard > Modules > Security Events**.
+**Threat intelligence > Threat Hunting**.
+
+### 🖥️ Vista del Dashboard
+
+[![Agente activo](imagenes/agente_activo.png)](imagenes/agente_activo.png)
+*El agente se registra y activa automáticamente al levantar el contenedor.*
+
+[![Escaneo SCA](imagenes/escaneo_seguridad_sca.png)](imagenes/escaneo_seguridad_sca.png)
+*Wazuh realiza un escaneo de seguridad inicial (SCA) al conectar el endpoint.*
+
+[![Alertas de ataque](imagenes/alertas_fuerza_bruta.png)](imagenes/alertas_fuerza_bruta.png)
+*Visualización de las alertas generadas por el script de simulación de ataque.*
+
+[![Interfaz Threat Hunting](imagenes/interfaz_threat_hunting.png)](imagenes/interfaz_threat_hunting.png)
+*Módulo de Threat Hunting donde se centralizan los eventos de seguridad.*
 
 ## Estructura del proyecto
 ```
