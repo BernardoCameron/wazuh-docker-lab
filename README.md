@@ -60,27 +60,34 @@ Estas credenciales provienen de la configuración oficial de Wazuh y están defi
 
 > ⚠️ Estas son credenciales de laboratorio. No usar en producción.
 
+## 🛡️ Simulación de Ataques (Prueba de Detección)
+
+Una vez que el agente esté en estado **Active** en el dashboard (puede tardar un par de minutos la primera vez), puedes simular un ataque de fuerza bruta SSH con el script incluido:
+
+```bash
+docker exec -it wazuh-agent bash /scripts/simulate-attack.sh
+```
+
+Esto generará logs de intentos fallidos en `/var/log/auth.log`. Podrás ver las alertas en tiempo real en:
+**Wazuh Dashboard > Modules > Security Events**.
+
 ## Estructura del proyecto
 ```
 wazuh-docker-lab/
-├── docker-compose.yml              # Archivo principal de compose
+├── docker-compose.yml              # Archivo principal de compose (con automatización)
 ├── generate-indexer-certs.yml      # Generador de certificados SSL
 ├── .env.example                    # Plantilla de variables de entorno
-├── config/
-│   ├── certs.yml                   # Definición de certificados
-│   ├── wazuh_indexer/              # Configuración del Indexer
-│   ├── wazuh_manager/              # Configuración del Manager
-│   └── wazuh_dashboard/            # Configuración del Dashboard
-└── scripts/
-    └── simulate-attack.sh          # Script de simulación de ataques
+├── .gitattributes                  # Reglas de formato de fin de línea
+├── config/                         # Configuraciones de servicios y Dashboard
+└── scripts/                        # Scripts de ataque (mapeados al agente)
 ```
 
 ## Objetivos del laboratorio
 
 - [x] Desplegar los componentes de Wazuh como servicios separados
-- [ ] Conectar un agente y generar alertas reales
-- [ ] Simular un ataque de fuerza bruta y detectarlo
-- [ ] Documentar hallazgos y reglas de alerta
+- [x] Conectar un agente y generar alertas reales
+- [x] Simular un ataque de fuerza bruta y detectarlo
+- [ ] Documentar hallazgos y reglas de alerta (En proceso)
 
 ## Referencias
 
