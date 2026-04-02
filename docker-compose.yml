@@ -105,15 +105,23 @@ services:
     environment:
       - WAZUH_MANAGER=wazuh.manager
       - WAZUH_AGENT_NAME=agente-laboratorio
+    volumes:
+      - ./scripts:/scripts
     command: >
       bash -c "
         apt-get update -y &&
         apt-get install -y curl lsb-release gnupg &&
+        rm -f /usr/share/keyrings/wazuh.gpg &&
         curl -s https://packages.wazuh.com/key/GPG-KEY-WAZUH | gpg --batch --dearmor -o /usr/share/keyrings/wazuh.gpg &&
         echo 'deb [signed-by=/usr/share/keyrings/wazuh.gpg] https://packages.wazuh.com/4.x/apt/ stable main' > /etc/apt/sources.list.d/wazuh.list &&
         apt-get update -y &&
         WAZUH_MANAGER=wazuh.manager WAZUH_AGENT_NAME=agente-laboratorio apt-get install -y wazuh-agent=4.14.4-1 &&
-        sleep 15 &&
+        # --- CONFIG PARA AUTH LOGS ---
+        sed -i 's|<\/ossec_config>|<localfile>\n    <log_format>syslog<\/log_format>\n    <location>\/var\/log\/auth.log<\/location>\n  <\/localfile>\n<\/ossec_config>|' /var/ossec/etc/ossec.conf &&
+        touch /var/log/auth.log &&
+
+        # -----------------------------
+        sleep 5 &&
         /var/ossec/bin/wazuh-control start &&
         tail -f /var/ossec/logs/ossec.log
       "
